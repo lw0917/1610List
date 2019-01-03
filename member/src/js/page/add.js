@@ -1,0 +1,35 @@
+require(['../js/main.js'],function(){
+	 require(['mui'],function(mui){
+		var url=location.search||'';
+		if(url){
+			url=JSON.parse('{"'+decodeURI(location.search).slice(1).replace('&','"="').replace('=','":"')+'"}');
+           mui.ajax('/api/findOne?id='+url.id,{
+			   success:function(res){
+				   console.log(res)
+				   if(res.code===0){
+					     document.querySelector('.name').value=res.msg.name;
+						 document.querySelector('.age').value=res.msg.age;
+						 document.querySelector('.phone').value=res.msg.tyep;
+						 document.querySelector('.title').value=res.msg.title;
+				   }
+			   }
+		   })  
+		}
+		var btn=document.querySelector('.add-btn');
+		   btn.addEventListener('tap',function(){
+			    mui.ajax('/api/add',{
+					type:'post',
+					data:{
+						name:document.querySelector('.name').value,
+						age:document.querySelector('.age').value,
+						type:document.querySelector('.phone').value,
+						title:document.querySelector('.title').value
+					},
+					success:function(res){
+						alert(res.msg)
+						location.href="../../index.html"						
+					}
+				})  
+		   })
+	 })
+})
